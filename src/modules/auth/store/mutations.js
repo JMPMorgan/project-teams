@@ -1,4 +1,4 @@
 export const setJWT = (state, data) => {
-  console.log(state);
-  console.log(data);
+  state.jwt = data.token;
+  state.isLoggin = true;
 };

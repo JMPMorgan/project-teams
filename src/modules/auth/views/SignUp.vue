@@ -89,6 +89,7 @@
 </template>
 <script>
 import NavBar from '@/components/NavBar.vue';
+import { mapActions } from 'vuex';
 export default {
   components: { NavBar },
   data() {
@@ -131,7 +132,16 @@ export default {
     }
   },
   methods: {
-    sendData() {
+    ...mapActions('authModule', ['signUp']),
+    async sendData() {
+      const { isLogged, errors } = await this.signUp(this.user)
+      if (!isLogged) {
+        alert('Error')
+        console.log(errors)
+        return;
+      }
+      alert('Success')
+      this.$router.push({ name: 'home' })
 
     },
     checkInput(input) {
