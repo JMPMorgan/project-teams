@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex';
 export default {
   data() {
     return {
@@ -23,9 +23,17 @@ export default {
     ...mapActions('groupModule', ['createNewGroup']),
     async createGroup() {
       console.log('chill')
-      await this.createNewGroup(this.name)
+      console.log(this.jwt)
+      const data = {
+        name: this.name,
+        jwt: this.jwt
+      }
+      await this.createNewGroup(data)
 
     }
+  },
+  computed: {
+    ...mapState('authModule', ['jwt']),
   }
 }
 </script>

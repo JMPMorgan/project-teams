@@ -11,12 +11,23 @@ import {
   faGear,
   faHome,
   faRightFromBracket,
+  faPaperPlane,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "@/assets/bootstrap/bootstrap.min.css";
 import "@/assets/bootstrap/bootstrap.bundle.min.js";
 
-library.add(faUser, faUsers, faMessage, faGear, faHome, faRightFromBracket);
+library.add(
+  faUser,
+  faUsers,
+  faMessage,
+  faGear,
+  faHome,
+  faRightFromBracket,
+  faPaperPlane,
+  faUserPlus
+);
 createApp(App)
   .component("font-icon", FontAwesomeIcon)
   .use(store)

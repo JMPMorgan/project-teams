@@ -25,4 +25,17 @@ export default [
     component: () =>
       import(/* webpackChunkName:"groups" */ "@/modules/menu/views/AllGroups"),
   },
+  {
+    path: "/mygroup/:id",
+    name: "mygroup",
+    component: () =>
+      import(
+        /* webpackChunkName:"mygroup" */ "@/modules/menu/views/CourseChat"
+      ),
+    props: (route) => {
+      return {
+        id: route.params.id,
+      };
+    },
+  },
 ];
