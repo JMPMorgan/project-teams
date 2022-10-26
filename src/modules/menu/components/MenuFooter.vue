@@ -34,7 +34,7 @@ export default {
 <style scoped>
 #container {
   overflow-x: hidden;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   max-width: 100%;
   width: 100%;

@@ -13,3 +13,16 @@ export const setGroup = (state, group) => {
   }
   state.groups = group;
 };
+
+export const setMessages = (state, messages) => {
+  state.messages = messages;
+  console.log(state.messages);
+};
+
+export const setUsers = (state, users) => {
+  state.users = users;
+  state.hasUsers = false;
+  if (users.length > 0) {
+    state.hasUsers = true;
+  }
+};

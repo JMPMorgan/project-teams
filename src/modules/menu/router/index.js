@@ -38,4 +38,15 @@ export default [
       };
     },
   },
+  {
+    path: "/chat/:id",
+    name: "chat",
+    component: () =>
+      import(/* webpackChunkName:"Chat" */ "@/modules/menu/views/UsersChat"),
+    props: (route) => {
+      return {
+        id: route.params.id,
+      };
+    },
+  },
 ];
