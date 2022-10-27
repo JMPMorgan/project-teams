@@ -129,3 +129,19 @@ export const getMessagesPerUser = async ({ commit }, data) => {
   console.log(json);
   commit("setMessages", json.conversations);
 };
+
+export const sendMessageToUser = async ({ commit }, data) => {
+  console.log(commit);
+  console.log(data);
+  const response = await fetch(URL + "/api/message/", {
+    method: "POST",
+    headers: {
+      token: data.token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  console.log(response);
+  const json = await response.json();
+  console.log(json);
+};

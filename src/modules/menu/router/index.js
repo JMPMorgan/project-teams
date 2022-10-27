@@ -39,13 +39,14 @@ export default [
     },
   },
   {
-    path: "/chat/:id",
+    path: "/chat/:id/:receiver",
     name: "chat",
     component: () =>
       import(/* webpackChunkName:"Chat" */ "@/modules/menu/views/UsersChat"),
     props: (route) => {
       return {
         id: route.params.id,
+        receiver: route.params.receiver,
       };
     },
   },
