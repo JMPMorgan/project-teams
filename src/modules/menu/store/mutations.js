@@ -15,7 +15,9 @@ export const setGroup = (state, group) => {
 };
 
 export const setMessages = (state, messages) => {
+  state.isLoading = true;
   state.messages = messages;
+  state.isLoading = false;
   console.log(state.messages);
 };
 

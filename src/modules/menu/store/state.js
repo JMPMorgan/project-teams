@@ -3,4 +3,5 @@ export default () => ({
   messages: [],
   users: [],
   hasUsers: false,
+  isLoading: true,
 });

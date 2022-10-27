@@ -1,7 +1,12 @@
 <template>
   <div>
     <NavBar />
-    <div class="container">
+    <div class="container" v-if="!isLoading">
+      <div class="m-2 row">
+        <div class="col-12" v-for="message in messages" :key="message._id">
+          {{ message.message }}
+        </div>
+      </div>
       <div class="container-message w-100">
         <div class="row w-100">
           <div class="col-10">
@@ -44,7 +49,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('groupModule', ['sendMessageToUser']),
+    ...mapActions('groupModule', ['sendMessageToUser', 'getConversationPerUser']),
     sendMessega() {
       const data = {
         token: this.jwt,
@@ -57,11 +62,15 @@ export default {
     }
   },
   computed: {
-    ...mapState('authModule', ['jwt'])
+    ...mapState('authModule', ['jwt']),
+    ...mapState('groupModule', ['messages', 'isLoading'])
   },
   created() {
-    console.log(this.id)
-    console.log(this.receiver)
+    const data = {
+      token: this.jwt,
+      id: this.id
+    }
+    this.getConversationPerUser(data)
   },
   components: { NavBar, MenuFooter }
 }
