@@ -32,6 +32,7 @@
 import NavBar from '@/components/NavBar.vue'
 import MenuFooter from '../components/MenuFooter.vue'
 import { mapActions, mapState } from 'vuex'
+import io from "socket.io-client"
 export default {
   props: {
     id: {
@@ -58,8 +59,10 @@ export default {
         userreceiver: this.receiver,
         idconversation: this.id
       }
+      console.log(this.socketInstance)
+      this.socketInstance.emit("mensaje-privado", data)
       this.sendMessageToUser(data)
-    }
+    },
   },
   computed: {
     ...mapState('authModule', ['jwt']),
@@ -71,6 +74,14 @@ export default {
       id: this.id
     }
     this.getConversationPerUser(data)
+    this.socketInstance = io("http://localhost:8000", {
+      extraHeaders: {
+        "token": this.jwt
+      }
+    })
+    this.socketInstance.on("mensaje-privado-chat", (data) => {
+      console.log(data)
+    })
   },
   components: { NavBar, MenuFooter }
 }
