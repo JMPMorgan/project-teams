@@ -28,3 +28,8 @@ export const setUsers = (state, users) => {
     state.hasUsers = true;
   }
 };
+
+export const addNewMessage = (state, message) => {
+  //console.log(message);
+  state.messages.push(message);
+};

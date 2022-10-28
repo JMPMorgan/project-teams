@@ -141,9 +141,14 @@ export const sendMessageToUser = async ({ commit }, data) => {
     },
     body: JSON.stringify(data),
   });
-  console.log(response);
   const json = await response.json();
   console.log(json);
+  const messageData = {
+    message: json.message.message,
+    _id: json.message._id,
+    from: json.message.sender.username,
+  };
+  commit("addNewMessage", messageData);
 };
 
 export const getConversationPerUser = async ({ commit }, data) => {

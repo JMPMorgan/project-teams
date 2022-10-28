@@ -4,6 +4,9 @@
     <div class="container" v-if="!isLoading">
       <div class="m-2 row">
         <div class="col-12" v-for="message in messages" :key="message._id">
+          <small
+            ><b>{{ message.from }}</b></small
+          >
           {{ message.message }}
         </div>
       </div>
@@ -46,7 +49,8 @@ export default {
   },
   data() {
     return {
-      message: ""
+      message: "",
+      messagesChat: []
     }
   },
   methods: {
@@ -57,16 +61,19 @@ export default {
         sendToUser: true,
         message: this.message,
         userreceiver: this.receiver,
-        idconversation: this.id
+        idconversation: this.id,
       }
-      console.log(this.socketInstance)
       this.socketInstance.emit("mensaje-privado", data)
       this.sendMessageToUser(data)
+      this.message = ''
     },
+    addNewMessage(message) {
+      this.messages.push(message)
+    }
   },
   computed: {
     ...mapState('authModule', ['jwt']),
-    ...mapState('groupModule', ['messages', 'isLoading'])
+    ...mapState('groupModule', ['messages', 'isLoading']),
   },
   created() {
     const data = {
@@ -80,7 +87,7 @@ export default {
       }
     })
     this.socketInstance.on("mensaje-privado-chat", (data) => {
-      console.log(data)
+      this.addNewMessage(data)
     })
   },
   components: { NavBar, MenuFooter }
