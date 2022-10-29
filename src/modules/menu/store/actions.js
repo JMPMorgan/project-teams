@@ -53,13 +53,10 @@ export const getMessages = async ({ commit }, data) => {
     return;
   }
   const json = await response.json();
-  console.log(json.messages);
   commit("setMessages", json.messages);
 };
 
 export const sendMessage = async ({ commit }, data) => {
-  console.log(commit);
-  console.log(data);
   const response = await fetch(URL + `/api/message/`, {
     method: "POST",
     body: JSON.stringify(data),
@@ -68,9 +65,13 @@ export const sendMessage = async ({ commit }, data) => {
       "Content-Type": "application/json",
     },
   });
-  console.log(response);
-  const json = await response.text();
-  console.log(json);
+  const json = await response.json();
+  const messageData = {
+    message: json.message.message,
+    _id: json.message._id,
+    from: json.from,
+  };
+  commit("addNewMessage", messageData);
 };
 
 export const searchUsers = async ({ commit }, data) => {
@@ -142,7 +143,6 @@ export const sendMessageToUser = async ({ commit }, data) => {
     body: JSON.stringify(data),
   });
   const json = await response.json();
-  console.log(json);
   const messageData = {
     message: json.message.message,
     _id: json.message._id,

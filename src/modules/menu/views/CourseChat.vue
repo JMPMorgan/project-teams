@@ -12,7 +12,10 @@
     </div>
     <div class="row">
       <div class="col-12" v-for="message in messages" :key="message._id">
-        <span>{{ message.message }}</span>
+        <small
+          ><b>{{ message.from }}</b></small
+        >
+        {{ message.message }}
       </div>
     </div>
     <div class="container-message w-100">
@@ -40,6 +43,8 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import NavBar from '@/components/NavBar.vue'
 import MenuFooter from '../components/MenuFooter.vue'
 import UserFinder from '../components/UserFinder.vue'
+import io from "socket.io-client"
+
 export default {
   props: {
     id: {
@@ -80,10 +85,15 @@ export default {
           token: this.jwt
         }
         await this.sendMessage(data)
+        this.socketInstance.emit("mensaje-grupo", data)
+        this.message = '';
       }
     },
     toggleAddUser() {
       this.isSearchUser = !this.isSearchUser
+    },
+    addNewMessage(message) {
+      this.messages.push(message)
     }
 
   },
@@ -94,6 +104,19 @@ export default {
   },
   created() {
     this.loadChat()
+    this.socketInstance = io("http://localhost:8000", {
+      extraHeaders: {
+        "token": this.jwt,
+        "group": this.id
+      }
+    })
+    this.socketInstance.on("mensaje-grupo-recibido", (data) => {
+      this.addNewMessage(data)
+
+    })
+  },
+  beforeUnmount() {
+    this.socketInstance.emit("desconectar-chat-sala", { group: this.id })
   },
   watch: {
     id() {
