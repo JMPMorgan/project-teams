@@ -13,6 +13,7 @@ import {
   faRightFromBracket,
   faPaperPlane,
   faUserPlus,
+  faLocationCrosshairs,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "@/assets/bootstrap/bootstrap.min.css";
@@ -26,7 +27,8 @@ library.add(
   faHome,
   faRightFromBracket,
   faPaperPlane,
-  faUserPlus
+  faUserPlus,
+  faLocationCrosshairs
 );
 createApp(App)
   .component("font-icon", FontAwesomeIcon)

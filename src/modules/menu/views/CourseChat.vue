@@ -12,15 +12,23 @@
     </div>
     <div class="row">
       <div class="col-12" v-for="message in messages" :key="message._id">
-        <small
-          ><b>{{ message.from }}</b></small
-        >
-        {{ message.message }}
+        <div v-if="message.situation === 0">
+          <small
+            ><b>{{ message.from }}</b></small
+          >
+          {{ message.message }}
+        </div>
+        <div v-else>
+          <small
+            ><b>{{ message.from }}</b></small
+          >
+          <a :href="message.message" target="_blank">Location</a>
+        </div>
       </div>
     </div>
     <div class="container-message w-100">
       <div class="row w-100">
-        <div class="col-10">
+        <div class="col-9 ps-1 pe-0">
           <input
             v-model="message"
             @keyup.enter="sendMessega"
@@ -28,9 +36,12 @@
             class="form-control rounded rounded-pill"
           />
         </div>
-        <div class="col-1">
+        <div class="col-3 d-flex">
           <button @click="sendMessega" class="btn btn-outline-success">
             <font-icon icon="fa-solid fa-paper-plane" />
+          </button>
+          <button @click="getLocation" class="btn btn-outline-info">
+            <font-icon icon="fa-solid fa-location-crosshairs" />
           </button>
         </div>
       </div>
@@ -76,18 +87,26 @@ export default {
         console.log(this.messages)
       }
     },
-    async sendMessega() {
+    async sendMessega(situation = 0) {
       if (this.message.trim().length > 0) {
         console.log(this.message)
         const data = {
           message: this.message,
           idgroup: this.id,
-          token: this.jwt
+          token: this.jwt,
+          situation
         }
         await this.sendMessage(data)
         this.socketInstance.emit("mensaje-grupo", data)
         this.message = '';
       }
+    },
+    getLocation() {
+      navigator.geolocation.getCurrentPosition(this.sendLocation)
+    },
+    sendLocation(position) {
+      this.message = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`
+      this.sendMessega(1)
     },
     toggleAddUser() {
       this.isSearchUser = !this.isSearchUser

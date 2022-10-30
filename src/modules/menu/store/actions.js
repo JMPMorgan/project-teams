@@ -70,6 +70,7 @@ export const sendMessage = async ({ commit }, data) => {
     message: json.message.message,
     _id: json.message._id,
     from: json.from,
+    situation: json.situation,
   };
   commit("addNewMessage", messageData);
 };
@@ -132,8 +133,6 @@ export const getMessagesPerUser = async ({ commit }, data) => {
 };
 
 export const sendMessageToUser = async ({ commit }, data) => {
-  console.log(commit);
-  console.log(data);
   const response = await fetch(URL + "/api/message/", {
     method: "POST",
     headers: {
@@ -147,6 +146,7 @@ export const sendMessageToUser = async ({ commit }, data) => {
     message: json.message.message,
     _id: json.message._id,
     from: json.message.sender.username,
+    situation: json.message.situation,
   };
   commit("addNewMessage", messageData);
 };
