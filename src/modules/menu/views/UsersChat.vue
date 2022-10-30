@@ -2,6 +2,23 @@
   <div>
     <NavBar />
     <div class="container container-messages" v-if="!isLoading">
+      <div class="row">
+        <div v-if="isReverseActive" class="col-2 p-0">
+          <div
+            class="
+              container-circle
+              d-flex
+              justify-content-center
+              align-items-center
+            "
+          >
+            <div class="pulsating-circle"></div>
+          </div>
+        </div>
+        <div class="col-10">
+          <h2>Chats's {{ userReverse }}</h2>
+        </div>
+      </div>
       <div class="m-2 row">
         <div class="col-12" v-for="message in messages" :key="message._id">
           <div v-if="message.situation === 0">
@@ -61,7 +78,9 @@ export default {
   data() {
     return {
       message: "",
-      messagesChat: []
+      messagesChat: [],
+      isReverseActive: false,
+      userReverse: ""
     }
   },
   methods: {
@@ -109,6 +128,20 @@ export default {
     this.socketInstance.on("mensaje-privado-chat", (data) => {
       this.addNewMessage(data)
     })
+    this.socketInstance.on("usuarios-activos", (users) => {
+      if (users) {
+        const user = users.filter(user => (user._id === this.receiver))
+        if (user.length > 0) {
+          this.userReverse = user[0].username
+          this.isReverseActive = true;
+          return;
+        }
+      }
+      this.isReverseActive = false;
+    })
+  },
+  beforeUnmount() {
+    this.socketInstance.emit("desconectar-chat")
   },
 
   components: { NavBar, MenuFooter }
@@ -123,5 +156,73 @@ export default {
 .container-messages {
   height: 45rem;
   overflow-y: scroll;
+}
+
+.pulsating-circle {
+  /*display: flex;
+
+  */
+  position: absolute;
+  /* padding: 10px 0px 0px 0px;*/
+  /*transform: translateX(-50%) translateY(-50%);*/
+  width: 10px;
+  height: 10px;
+  z-index: 50;
+}
+
+.pulsating-circle:before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 300%;
+  height: 300%;
+  box-sizing: border-box;
+  margin-left: -100%;
+  margin-top: -100%;
+  border-radius: 45px;
+  background-color: #01a4e9;
+  animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  z-index: 50;
+}
+
+.pulsating-circle:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(17, 243, 84);
+  border-radius: 15px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+  z-index: 50;
+}
+
+.container-circle {
+  padding: 15px 0px 0px 35px;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.33);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
 }
 </style>

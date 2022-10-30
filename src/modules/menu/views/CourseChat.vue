@@ -1,6 +1,6 @@
 <template>
   <NavBar />
-  <div class="container" v-if="isLoading">
+  <div class="container" v-if="!isLoading">
     <div class="d-flex justify-content-between">
       <h2>{{ group.name }}</h2>
       <button @click="toggleAddUser" class="btn btn-outline-success">
@@ -82,9 +82,7 @@ export default {
           id: this.id,
           token: this.jwt
         }
-        console.log(data)
         this.messages = await this.getMessages(data)
-        console.log(this.messages)
       }
     },
     async sendMessega(situation = 0) {
@@ -133,9 +131,15 @@ export default {
       this.addNewMessage(data)
 
     })
+    this.socketInstance.on("usuarios-activos", (data) => {
+      console.log(data)
+    })
   },
   beforeUnmount() {
     this.socketInstance.emit("desconectar-chat-sala", { group: this.id })
+    this.socketInstance.emit("desconectar-chat")
+
+
   },
   watch: {
     id() {
